@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#050817"><meta name="description" content="Media Download — download public TikTok and Facebook videos.">
+<link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon.svg" type="image/svg+xml">
+<title>Media Download</title>
+<style>
+:root{--bg:#03050d;--card:rgba(13,18,38,.72);--line:rgba(255,255,255,.12);--txt:#fff;--muted:#9aa6c2;--a:#6d5dfc;--b:#00d9ff}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;min-height:100vh;color:var(--txt);font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;background:radial-gradient(circle at 15% 10%,#24216a 0,transparent 34%),radial-gradient(circle at 90% 30%,#063f57 0,transparent 30%),var(--bg);overflow-x:hidden}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;background-image:radial-gradient(rgba(255,255,255,.16) 1px,transparent 1px);background-size:34px 34px;opacity:.16;mask-image:linear-gradient(#000,transparent 80%)}
+.orb{position:fixed;border-radius:50%;filter:blur(75px);opacity:.18;pointer-events:none;animation:float 8s ease-in-out infinite alternate}.o1{width:280px;height:280px;background:#7357ff;left:-120px;top:35%}.o2{width:260px;height:260px;background:#00cfff;right:-110px;top:55%;animation-delay:2s}@keyframes float{to{transform:translateY(-55px) scale(1.12)}}
+.wrap{width:min(880px,92%);margin:auto}.top{display:flex;align-items:center;justify-content:space-between;padding:18px 0}.brand{display:flex;align-items:center;gap:10px;font-weight:900;letter-spacing:.2px}.logo{width:44px;height:44px;border-radius:14px;object-fit:cover;box-shadow:0 0 30px #315cff88;animation:logo 3s ease-in-out infinite}@keyframes logo{50%{transform:rotate(3deg) scale(1.07);filter:brightness(1.15)}}
+.topBtns{display:flex;gap:8px}.btn,.install{border:1px solid var(--line);background:rgba(255,255,255,.06);color:#fff;border-radius:13px;padding:10px 13px;font-weight:800;cursor:pointer;transition:.25s}.btn:hover,.install:hover{transform:translateY(-2px);background:rgba(255,255,255,.1)}.install{display:none;background:linear-gradient(135deg,var(--a),#4f46e5)}
+.hero{text-align:center;padding:55px 0 35px}.badge{display:inline-flex;align-items:center;gap:8px;border:1px solid #6d5dfc66;background:#6d5dfc14;color:#ddd9ff;border-radius:999px;padding:8px 13px;font-size:13px;animation:up .7s both}.dot{width:7px;height:7px;border-radius:50%;background:#45f3a5;box-shadow:0 0 15px #45f3a5}
+h1{font-size:clamp(48px,10vw,88px);line-height:.94;letter-spacing:-5px;margin:20px 0 14px;animation:up .8s .08s both}.shine{background:linear-gradient(90deg,#fff,#a99cff,#6ee7ff,#fff);background-size:250% auto;color:transparent;background-clip:text;-webkit-background-clip:text;animation:shine 4s linear infinite}@keyframes shine{to{background-position:250% center}}
+.hero p{color:var(--muted);margin:0 auto;max-width:570px;line-height:1.7;animation:up .8s .16s both}.down{margin:30px auto 0;padding:11px;border:1px solid var(--line);border-radius:24px;background:var(--card);backdrop-filter:blur(22px);box-shadow:0 28px 80px #0008;animation:up .9s .25s both}.input{display:flex;gap:8px;padding:5px;border:1px solid var(--line);border-radius:18px;background:#0004}.input input{flex:1;min-width:0;border:0;outline:0;background:transparent;color:#fff;padding:16px;font-size:15px}.input input::placeholder{color:#65718b}.go{border:0;border-radius:14px;padding:0 21px;color:#fff;font-weight:900;background:linear-gradient(135deg,var(--a),#4f46e5);box-shadow:0 10px 30px #5b4ff955;cursor:pointer;transition:.25s}.go:hover{transform:translateY(-2px);filter:brightness(1.12)}.go:disabled{opacity:.65;cursor:wait}
+.quick{display:flex;justify-content:space-between;align-items:center;margin-top:9px;gap:8px}.small{padding:8px 11px}.hint{font-size:12px;color:#66738d}.status{display:none;text-align:left;margin-top:10px;padding:12px 14px;border-radius:13px;font-size:13px}.status.show{display:block;animation:up .25s both}.ok{background:#22c55e12;border:1px solid #22c55e33}.err{background:#fb718512;border:1px solid #fb718533}.info{background:#22d3ee10;border:1px solid #22d3ee33}
+.result{display:none;margin-top:12px;text-align:left}.result.show{display:block;animation:up .35s both}.preview{overflow:hidden;border-radius:18px;background:#000;border:1px solid var(--line)}video{display:block;width:100%;max-height:520px}.save{width:100%;margin-top:10px;padding:14px;border:0;border-radius:14px;background:linear-gradient(135deg,#00a8d8,#0077ff);color:#fff;font-weight:900;font-size:15px;cursor:pointer;transition:.25s}.save:hover{transform:translateY(-2px)}
+.mini{display:flex;justify-content:center;gap:9px;flex-wrap:wrap;margin-top:28px;color:#7f8ba4;font-size:12px}.mini span{padding:8px 11px;border:1px solid var(--line);border-radius:999px;background:#ffffff06;animation:up .6s both}.mini span:nth-child(2){animation-delay:.08s}.mini span:nth-child(3){animation-delay:.16s}
+footer{text-align:center;color:#65718b;font-size:12px;padding:50px 0 25px}footer b{color:#cbd5e1}.toast{position:fixed;left:50%;bottom:20px;transform:translate(-50%,25px);opacity:0;pointer-events:none;background:#0b1022ee;border:1px solid var(--line);padding:12px 15px;border-radius:13px;backdrop-filter:blur(15px);transition:.25s;z-index:30}.toast.show{opacity:1;transform:translate(-50%,0)}
+@keyframes up{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}@keyframes spin{to{transform:rotate(360deg)}}.spin{display:inline-block;width:15px;height:15px;border:2px solid #ffffff44;border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;vertical-align:-3px;margin-right:7px}
+@media(max-width:620px){.topBtns .btn{display:none}.hero{padding-top:38px}h1{letter-spacing:-2.8px}.input{flex-direction:column}.go{height:50px}.quick{align-items:flex-start;flex-direction:column}.logo{width:40px;height:40px}}
+</style>
+</head>
+<body><div class="orb o1"></div><div class="orb o2"></div>
+<div class="wrap">
+<header class="top"><div class="brand"><img class="logo" src="https://i.ibb.co/7dQmyKLh/file-000000009e4c81fab882bc1973a3524b.png" alt="Media Download"><span>Media Download</span></div><div class="topBtns"><button class="install" id="installBtn" onclick="installApp()">📲 Install App</button><button class="btn" onclick="focusBox()">⬇️ Download</button></div></header>
+<main class="hero">
+<div class="badge"><span class="dot"></span> Fast • Clean • Animated</div>
+<h1><span class="shine">Media Download</span></h1>
+<p>Paste a public TikTok or Facebook video/Reel link and download it in seconds. ✨</p>
+<section class="down" id="down">
+<div class="input"><input id="url" type="url" autocomplete="off" placeholder="🔗 Paste TikTok / Facebook link..." onkeydown="if(event.key==='Enter')downloadMedia()"><button class="go" id="go" onclick="downloadMedia()">⬇️ Download</button></div>
+<div class="quick"><div><button class="btn small" onclick="pasteLink()">📋 Paste</button><button class="btn small" onclick="clearAll()">✕ Clear</button></div><div class="hint">TikTok • Facebook Reels • Public videos</div></div>
+<div id="status" class="status"></div>
+<div id="result" class="result"><div class="preview"><video id="video" controls playsinline></video></div><button id="save" class="save">⬇️ Save Video</button></div>
+</section>
+<div class="mini"><span>⚡ Fast</span><span>📱 Mobile Ready</span><span>🔒 Simple & Clean</span></div>
+</main>
+<footer>© 2026 <b>Media Download</b> • Use only with content you are allowed to download.</footer>
+</div><div id="toast" class="toast">Done</div>
+<script>
+const input=document.getElementById('url'),statusBox=document.getElementById('status'),result=document.getElementById('result'),video=document.getElementById('video'),goBtn=document.getElementById('go'),toast=document.getElementById('toast');
+function focusBox(){document.getElementById('down').scrollIntoView({behavior:'smooth',block:'center'});setTimeout(()=>input.focus(),350)}
+function toastMsg(t){toast.textContent=t;toast.classList.add('show');clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>toast.classList.remove('show'),2200)}
+function showStatus(t,c='info'){statusBox.className='status show '+c;statusBox.innerHTML=t}
+function clearAll(){input.value='';result.classList.remove('show');statusBox.className='status';video.removeAttribute('src');video.load();toastMsg('Cleared')}
+async function pasteLink(){try{input.value=await navigator.clipboard.readText();toastMsg('📋 Link pasted');input.focus()}catch{showStatus('⚠️ Paste permission is unavailable. Paste the link manually.','err')}}
+function saveLink(url,name='media-download.mp4'){const a=document.createElement('a');a.href=url;a.target='_blank';a.rel='noopener';a.download=name;document.body.appendChild(a);a.click();a.remove();toastMsg('⬇️ Download started')}
+function isSupported(u){try{const h=new URL(u).hostname.toLowerCase().replace(/^www\./,'');return ['tiktok.com','m.tiktok.com','vm.tiktok.com','vt.tiktok.com','facebook.com','m.facebook.com','fb.watch'].some(x=>h===x||h.endsWith('.'+x))}catch{return false}}
+async function downloadMedia(){const u=input.value.trim();if(!u){showStatus('🔗 Please paste a TikTok or Facebook link.','err');return}if(!isSupported(u)){showStatus('❌ Supported: TikTok videos and public Facebook videos/Reels.','err');return}goBtn.disabled=true;goBtn.innerHTML='<span class="spin"></span>Working';result.classList.remove('show');showStatus('⏳ Finding your video...','info');try{const r=await fetch('/api/download?url='+encodeURIComponent(u));const j=await r.json();if(!r.ok||!j.ok||!j.video)throw new Error(j.error||'No video');video.src=j.video;video.load();document.getElementById('save').onclick=()=>saveLink(j.video,(j.title||'media-download')+'.mp4');result.classList.add('show');showStatus('🎉 Video is ready!','ok');toastMsg('🎉 Ready!');result.scrollIntoView({behavior:'smooth',block:'center'})}catch(e){console.error(e);showStatus('❌ '+(e.message||'Could not download this video.'),'err');toastMsg('Download failed')}finally{goBtn.disabled=false;goBtn.textContent='⬇️ Download'}}
+let deferredPrompt=null;window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;document.getElementById('installBtn').style.display='inline-block'});async function installApp(){if(!deferredPrompt){toastMsg('📱 Browser menu → Install app');return}deferredPrompt.prompt();await deferredPrompt.userChoice;deferredPrompt=null;document.getElementById('installBtn').style.display='none'}window.addEventListener('appinstalled',()=>toastMsg('🎉 App installed'));if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+</script></body></html>

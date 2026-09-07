@@ -1,0 +1,16 @@
+const express=require('express');
+const path=require('path');
+const app=express();
+const PORT=process.env.PORT||3000;
+const TIKWM_API='https://www.tikwm.com/api/?url=';
+const COBALT_API=(process.env.COBALT_API_URL||'https://api.cobalt.tools').replace(/\/$/,'');
+app.use(express.static(__dirname));
+function hostOf(value){try{return new URL(value).hostname.toLowerCase().replace(/^www\./,'')}catch{return ''}}
+function isTikTok(value){const h=hostOf(value);return ['tiktok.com','m.tiktok.com','vm.tiktok.com','vt.tiktok.com'].some(x=>h===x||h.endsWith('.'+x))}
+function isFacebook(value){const h=hostOf(value);return ['facebook.com','m.facebook.com','fb.watch'].some(x=>h===x||h.endsWith('.'+x))}
+async function tikwm(url){const r=await fetch(TIKWM_API+encodeURIComponent(url),{headers:{'User-Agent':'Mozilla/5.0','Accept':'application/json'}});if(!r.ok)throw new Error('TikTok service unavailable');const j=await r.json(),d=j?.data;if(!d?.play)throw new Error('No downloadable video found');return {ok:true,title:d.title||'TikTok Video',video:d.play}}
+async function cobalt(url){const r=await fetch(COBALT_API+'/',{method:'POST',headers:{'Accept':'application/json','Content-Type':'application/json'},body:JSON.stringify({url,downloadMode:'auto',videoQuality:'1080',filenameStyle:'basic',alwaysProxy:true})});let j={};try{j=await r.json()}catch{}if(!r.ok)throw new Error(j?.error?.code||j?.message||'Media service unavailable');let link=null;if(j.status==='tunnel'||j.status==='redirect')link=j.url;else if(j.status==='picker'&&Array.isArray(j.picker)){const item=j.picker.find(x=>x.type==='video')||j.picker[0];link=item?.url}if(!link)throw new Error(j?.error?.code||'No downloadable public video found');return {ok:true,title:j.filename||'Media Download',video:link}}
+app.get('/api/download',async(req,res)=>{const url=String(req.query.url||'').trim();if(!url)return res.status(400).json({ok:false,error:'URL is required.'});try{if(isTikTok(url)){try{return res.json(await tikwm(url))}catch(e){console.warn('TikWM failed, trying Cobalt:',e.message);return res.json(await cobalt(url))}}if(isFacebook(url))return res.json(await cobalt(url));return res.status(400).json({ok:false,error:'Only TikTok and public Facebook video/Reel links are supported.'})}catch(e){console.error('Download error:',e.message);return res.status(502).json({ok:false,error:e.message||'Media service is temporarily unavailable.'})}});
+app.get('/api/media',async(req,res)=>{const target=String(req.query.url||'').trim();if(!target)return res.status(400).send('Missing media URL');try{const u=new URL(target);if(u.protocol!=='https:')return res.status(400).send('Invalid media URL');const r=await fetch(u,{headers:{'User-Agent':'Mozilla/5.0'}});if(!r.ok||!r.body)return res.status(502).send('Media could not be fetched');res.setHeader('Content-Type',r.headers.get('content-type')||'video/mp4');res.setHeader('Cache-Control','public,max-age=300');const reader=r.body.getReader();res.on('close',()=>reader.cancel().catch(()=>{}));while(true){const {done,value}=await reader.read();if(done)break;res.write(Buffer.from(value))}res.end()}catch(e){if(!res.headersSent)res.status(502).send('Media proxy failed');else res.end()}});
+app.get('*',(req,res)=>res.sendFile(path.join(__dirname,'index.html')));
+app.listen(PORT,()=>console.log(`Media Download running on ${PORT}`));
